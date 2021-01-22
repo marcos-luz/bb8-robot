@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import './App.scss';
 
+import ControlWrap from './components/ControlWrap';
+
 class App extends React.Component {
   constructor(props){
       super(props);
@@ -92,30 +94,13 @@ class App extends React.Component {
     
     return (
       <div>
-        
+        {/* Controls */}
         <div className="config">
-          <div className='control-wrap'>
-            <p>Speed: {speed}</p>
-              <input
-                type="range"
-                min="0"
-                max="11"
-                step="0.1"
-                value={speed}
-                onChange={this.handleSpeedChange.bind(this)} />
-          </div>
-          <div className='control-wrap'>
-            <p>Acceleration: {accelMod}</p>
-              <input
-                type="range"
-                min="0"
-                max="3"
-                step="0.1"
-                value={accelMod}
-                onChange={this.handleAccelChange.bind(this)} />
-          </div>
+          <ControlWrap speed={speed} min="0" max="11" step="0.1" value={speed} handleFunction={this.handleSpeedChange.bind(this)}/>
+          <ControlWrap speed={accelMod} min="0" max="3" step="0.1" value={accelMod} handleFunction={this.handleAccelChange.bind(this)}/>
         </div>
-        
+
+        {/* BB8 */}
         <div className="bb8" style={{WebkitTransform: `translateX(${droidX}px)`}}>
           <div className={'antennas ' + (toTheRight ? 'right' : '')}
                style={{WebkitTransform: `translateX(${(mouseX - droidX) / 25}px) rotateZ(${(mouseX - droidX) / 80 }deg)`}}>
