@@ -14,6 +14,8 @@ class App extends React.Component {
       this.state = {
           droidX: 0,
           mouseX: 0,
+          // -- Adcionado por nós para o movimento de saltar --
+          droidY: 0,
           toTheRight: true,
           speed: 2,
           accelMod: 1
@@ -25,6 +27,18 @@ class App extends React.Component {
       this.setState({
           mouseX: event.pageX
       })
+  }
+
+// -- Adcionado por nós para o movimento de saltar --
+  handleSpacePress(){
+    this.setState({
+      droidY: -100
+    })
+    setTimeout(() => {
+      this.setState({
+        droidY:0
+      })
+    }, 80);
   }
 
   // Speed Mod Bar
@@ -84,6 +98,12 @@ class App extends React.Component {
   // Set up the mouse event listener and fire up the movement function.
   componentDidMount() {
       document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+      // -- Adcionado por nós para o movimento de saltar --
+      document.addEventListener('keyup', event => {
+        if (event.code === 'Space') {
+          this.handleSpacePress();
+        }
+      })
       setInterval(this.movement.bind(this), 1);
   }
 
@@ -94,22 +114,21 @@ class App extends React.Component {
 
   // Away we go.
   render() {
-    let {speed, accelMod, droidX, mouseX, toTheRight} = this.state;
+    let {speed, accelMod, droidX, droidY, mouseX, toTheRight} = this.state;
     
     return (
       <div>
         {/* Controls */}
         <div className="config">
-          <ControlWrap speed={speed} min="0" max="11" step="0.1" value={speed} handleFunction={this.handleSpeedChange.bind(this)}/>
-          <ControlWrap speed={accelMod} min="0" max="3" step="0.1" value={accelMod} handleFunction={this.handleAccelChange.bind(this)}/>
+          <ControlWrap name="Speed" speed={speed} min="0" max="11" step="0.1" value={speed} handleFunction={this.handleSpeedChange.bind(this)}/>
+          <ControlWrap name="Acceleration" speed={accelMod} min="0" max="3" step="0.1" value={accelMod} handleFunction={this.handleAccelChange.bind(this)}/>
         </div>
 
         {/* BB8 */}
-        <BB8 speed={speed} accelMod={accelMod} droidX={droidX} mouseX={mouseX} toTheRight={toTheRight} />
-        
+        <BB8 speed={speed} accelMod={accelMod} droidY={droidY} droidX={droidX} mouseX={mouseX} toTheRight={toTheRight} />
         
         <div className="instructions">
-          <p>move your mouse.</p>
+          <p>To move BB8: mouse to right and left; space to jump.</p>
         </div>
         
       </div>

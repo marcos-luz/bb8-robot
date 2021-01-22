@@ -9,7 +9,7 @@ import '../App.scss';
 
 function BB8(props) {
   return(
-    <div className="bb8" style={{WebkitTransform: `translateX(${props.droidX}px)`}}>
+    <div className="bb8" style={{WebkitTransform: `translate(${props.droidX}px, ${props.droidY}px)`, 'transitionDuration': 0.5}}>
       <Antennas toTheRight={props.toTheRight} mouseX={props.mouseX} droidX={props.droidX} />
       <Head toTheRight={props.toTheRight} mouseX={props.mouseX} droidX={props.droidX} />
       <Ball droidX={props.droidX}/>

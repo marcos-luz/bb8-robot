@@ -4,7 +4,7 @@ import './../App.scss';
 function ControlWrap(props){
   return(
     <div className='control-wrap'>
-      <p>Speed: {props.speed}</p>
+      <p>{props.name}: {props.speed}</p>
       <input
         type="range"
         min={props.min}
