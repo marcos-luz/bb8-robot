@@ -1,6 +1,6 @@
 import React from 'react';
 
-import '../App.scss';
+import '../styles/Ball.scss';
 
 function Ball(props) {
   return (

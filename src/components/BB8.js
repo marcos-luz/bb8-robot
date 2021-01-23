@@ -1,11 +1,10 @@
 import React from 'react';
 
-
 import Antennas from './Antennas';
 import Head from './Head';
 import Ball from './Ball';
 
-import '../App.scss';
+import '../styles/BB8.scss';
 
 function BB8(props) {
   return(

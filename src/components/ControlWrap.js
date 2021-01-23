@@ -1,16 +1,15 @@
-import React, { Component } from 'react';
-import './../App.scss';
+import '../styles/Antennas.scss';
 
 function ControlWrap(props){
   return(
     <div className='control-wrap'>
-      <p>{props.name}: {props.speed}</p>
+      <p>{props.name}: {props.value}</p>
       <input
         type="range"
         min={props.min}
         max={props.max}
         step="0.1"
-        value={props.speed}
+        value={props.value}
         onChange={props.handleFunction} 
       />
     </div>

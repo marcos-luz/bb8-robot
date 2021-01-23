@@ -1,36 +1,30 @@
 import React, { Component } from 'react';
 import './App.scss';
 
-import Antennas from './components/Antennas';
-import Ball from './components/Ball';
 import BB8 from './components/BB8';
 import ControlWrap from './components/ControlWrap';
-import Head from './components/Head';
 
-class App extends React.Component {
+class App extends Component {
   constructor(props){
-      super(props);
-
-      this.state = {
-          droidX: 0,
-          mouseX: 0,
-          // -- Adcionado por nós para o movimento de saltar --
-          droidY: 0,
-          toTheRight: true,
-          speed: 2,
-          accelMod: 1
-      }
+    super(props);
+    this.state = {
+      droidX: 0,
+      mouseX: 0,
+      droidY: 0, // Estado que controla o salto, adicionado por nós.
+      toTheRight: true,
+      speed: 2,
+      accelMod: 1
+    }
   }
 
-  // Keep track of the mouse position.
   handleMouseMove(event) {
-      this.setState({
-          mouseX: event.pageX
-      })
+    this.setState({
+      mouseX: event.pageX
+    });
   }
 
-// -- Adcionado por nós para o movimento de saltar --
-  handleSpacePress(){
+  // Método que controla o salto, adicionado por nós
+  handleSpacePress() {
     this.setState({
       droidY: -100
     })
@@ -38,81 +32,72 @@ class App extends React.Component {
       this.setState({
         droidY:0
       })
-    }, 80);
+    }, 280);
   }
 
-  // Speed Mod Bar
   handleSpeedChange(e) {
-      if(parseFloat(e.target.value)) {
-          this.setState({
-              speed: e.target.value
-          })
-      }
-  }
-
-  // Acceleration Mod Bar
-  handleAccelChange(e) {
-      if(parseFloat(e.target.value)) {
-          this.setState({
-              accelMod: e.target.value
-          })
-      }
-  }
-
-  // Get moving!
-  movement() {
-      let {droidX, mouseX, speed, accelMod} = this.state;
-
-      // Need a pretty strict if statement to make sure React doesn't end up in a 
-      // render loop with all the state changes / re-rendering going on.
-      if(Math.abs(Math.round(droidX)-mouseX) !== 1){
-        
-          let distance = mouseX - droidX;
-          let acceleration = Math.abs(distance * accelMod) / 100;
-
-          // Move to the right
-          if (droidX < mouseX) {
-              this.setState({
-                  droidX: droidX+(speed*acceleration),
-                  toTheRight: true
-              });
-          }
-        
-          // Move to the left
-          else {
-              this.setState({
-                  droidX: droidX-(speed*acceleration),
-                  toTheRight: false
-              });
-          }
-      }
-  }
-
-  // Get some initial movement on first mount. 
-  componentWillMount() {
+    if(parseFloat(e.target.value)) {
       this.setState({
-          mouseX: 300
-      });
-  }
-
-  // Set up the mouse event listener and fire up the movement function.
-  componentDidMount() {
-      document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-      // -- Adcionado por nós para o movimento de saltar --
-      document.addEventListener('keyup', event => {
-        if (event.code === 'Space') {
-          this.handleSpacePress();
-        }
+        speed: e.target.value
       })
-      setInterval(this.movement.bind(this), 1);
+    }
   }
 
-  // Clean up.
+  handleAccelChange(e) {
+    if(parseFloat(e.target.value)) {
+      this.setState({
+        accelMod: e.target.value
+      })
+    }
+  }
+
+  movement() {
+    let {droidX, mouseX, speed, accelMod} = this.state;
+
+    if(Math.abs(Math.round(droidX)-mouseX) !== 1){
+      
+      let distance = mouseX - droidX;
+      let acceleration = Math.abs(distance * accelMod) / 100;
+
+      if (droidX < mouseX) {
+        this.setState({
+          droidX: droidX+(speed*acceleration),
+          toTheRight: true
+        });
+      }
+    
+      else {
+        this.setState({
+          droidX: droidX-(speed*acceleration),
+          toTheRight: false
+        });
+      }
+    }
+  }
+
+  componentWillMount() {
+    this.setState({
+      mouseX: 300
+    });
+  }
+
+  componentDidMount() {
+    document.addEventListener('mousemove', (e) => this.handleMouseMove(e));
+    
+    // listener da tecla espaço, adicionado por nós
+    document.addEventListener('keyup', event => {
+      if (event.code === 'Space') {
+        this.handleSpacePress();
+      }
+    })
+
+    setInterval(this.movement.bind(this), 1);
+  }
+
   componentWillUnmount() {
-      document.removeEventListener('mousemove', (e) => this.handleMouseMove(e));
+    document.removeEventListener('mousemove', (e) => this.handleMouseMove(e));
   }
 
-  // Away we go.
   render() {
     let {speed, accelMod, droidX, droidY, mouseX, toTheRight} = this.state;
     
@@ -120,17 +105,17 @@ class App extends React.Component {
       <div>
         {/* Controls */}
         <div className="config">
-          <ControlWrap name="Speed" speed={speed} min="0" max="11" step="0.1" value={speed} handleFunction={this.handleSpeedChange.bind(this)}/>
-          <ControlWrap name="Acceleration" speed={accelMod} min="0" max="3" step="0.1" value={accelMod} handleFunction={this.handleAccelChange.bind(this)}/>
+          <ControlWrap name="Velocidade" min="0" max="11" step="0.1" value={speed} handleFunction={this.handleSpeedChange.bind(this)}/>
+          <ControlWrap name="Aceleração" min="0" max="3" step="0.1" value={accelMod} handleFunction={this.handleAccelChange.bind(this)}/>
         </div>
 
         {/* BB8 */}
-        <BB8 speed={speed} accelMod={accelMod} droidY={droidY} droidX={droidX} mouseX={mouseX} toTheRight={toTheRight} />
-        
-        <div className="instructions">
-          <p>To move BB8: mouse to right and left; space to jump.</p>
+        <div>
+          <BB8 speed={speed} accelMod={accelMod} droidY={droidY} droidX={droidX} mouseX={mouseX} toTheRight={toTheRight} />
         </div>
-        
+        <div className="instructions">
+          <p>Para mover o BB8: mova o mouse para a esquerda ou direita; aperte espaço para.</p>
+        </div>   
       </div>
     );
   }
